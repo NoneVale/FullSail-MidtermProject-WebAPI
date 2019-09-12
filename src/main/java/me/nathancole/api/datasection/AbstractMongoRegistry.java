@@ -52,6 +52,11 @@ public abstract class AbstractMongoRegistry<T extends Model> implements Registry
         m_Collection.deleteOne(Filters.eq("key", p_Key));
     }
 
+    public void remove(T p_Value) {
+        m_RegisteredData.asMap().remove(p_Value.getKey());
+        m_Collection.deleteOne(Filters.eq("key", p_Value.getKey()));
+    }
+
     public void saveToDb(String p_Key) {
         Optional<Document> loaded = documentFromDb(p_Key);
         if (m_RegisteredData.asMap().containsKey(p_Key)) {

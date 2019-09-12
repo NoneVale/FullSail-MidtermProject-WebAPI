@@ -13,6 +13,8 @@ public interface Registry<T extends Model> {
 
     void remove(String key);
 
+    void remove(T p_Value);
+
     void loadFromDb(String key);
 
     Map<String, T> loadAllFromDb();

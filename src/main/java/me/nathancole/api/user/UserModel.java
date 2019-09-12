@@ -65,7 +65,7 @@ public class UserModel implements Model {
 
     public void setEmail(String p_Email) {
         this.m_Email = p_Email;
-        Main.getUserRegistry().register(this);
+        Main.getUserRegistry(getUsername()).register(this);
     }
 
     public String getFirstName() {
@@ -74,7 +74,7 @@ public class UserModel implements Model {
 
     public void setFirstName(String p_FirstName) {
         this.m_FirstName = p_FirstName;
-        Main.getUserRegistry().register(this);
+        Main.getUserRegistry(getUsername()).register(this);
     }
 
     public String getLastName() {
@@ -83,7 +83,7 @@ public class UserModel implements Model {
 
     public void setLastName(String p_LastName) {
         this.m_LastName = p_LastName;
-        Main.getUserRegistry().register(this);
+        Main.getUserRegistry(getUsername()).register(this);
     }
 
     public String getPasswordHash() {
@@ -92,7 +92,7 @@ public class UserModel implements Model {
 
     public void setPasswordHash(String p_PasswordHash) {
         this.m_PasswordHash = p_PasswordHash;
-        Main.getUserRegistry().register(this);
+        Main.getUserRegistry(getUsername()).register(this);
     }
 
     public String getUsername() {
@@ -100,8 +100,9 @@ public class UserModel implements Model {
     }
 
     public void setUsername(String p_Username) {
+        Main.getUserRegistry(getUsername()).remove(this);
         this.m_Username = p_Username;
-        Main.getUserRegistry().register(this);
+        Main.getUserRegistry(getUsername()).register(this);
     }
 
     public int getBirthDay() {
@@ -110,7 +111,7 @@ public class UserModel implements Model {
 
     public void setBirthDay(int p_BirthDay) {
         this.m_BirthDay = p_BirthDay;
-        Main.getUserRegistry().register(this);
+        Main.getUserRegistry(getUsername()).register(this);
     }
 
     public int getBirthMonth() {
@@ -119,7 +120,7 @@ public class UserModel implements Model {
 
     public void setBirthMonth(int p_BirthMonth) {
         this.m_BirthMonth = p_BirthMonth;
-        Main.getUserRegistry().register(this);
+        Main.getUserRegistry(getUsername()).register(this);
     }
 
     public int getBirthYear() {
@@ -128,7 +129,7 @@ public class UserModel implements Model {
 
     public void setBirthYear(int p_BirthYear) {
         this.m_BirthYear = p_BirthYear;
-        Main.getUserRegistry().register(this);
+        Main.getUserRegistry(getUsername()).register(this);
     }
 
     public boolean isVerified() {
@@ -137,7 +138,7 @@ public class UserModel implements Model {
 
     public void setVerified(boolean p_Verified) {
         this.m_Verified = p_Verified;
-        Main.getUserRegistry().register(this);
+        Main.getUserRegistry(getUsername()).register(this);
     }
 
     @Override

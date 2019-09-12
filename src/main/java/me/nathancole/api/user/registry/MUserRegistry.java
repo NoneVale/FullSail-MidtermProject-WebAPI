@@ -12,6 +12,10 @@ public class MUserRegistry extends AbstractMongoRegistry<UserModel> implements U
         super(database.getCollection(m_Name), -1);
     }
 
+    public MUserRegistry(String p_Collection, MongoDatabase m_Database) {
+        super(m_Database.getCollection(p_Collection), -1);
+    }
+
     @Override
     public Map<String, UserModel> getRegisteredData() {
         return m_RegisteredData.asMap();
