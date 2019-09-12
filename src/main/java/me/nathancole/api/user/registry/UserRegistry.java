@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface UserRegistry extends Registry<UserModel> {
 
-    String NAME = "users";
+    String m_Name = "users";
 
     default UserModel fromDataSection(String stringKey, DataSection data) {
         return new UserModel(stringKey, data);
