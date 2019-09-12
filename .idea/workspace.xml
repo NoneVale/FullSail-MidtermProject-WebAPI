@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="de383a1f-3477-410f-bd02-ae13c79d7688" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/nathancole/api/user/UserModel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/nathancole/api/user/registry/MUserRegistry.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/nathancole/api/user/registry/UserRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/nathancole/api/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/nathancole/api/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/me/nathancole/api/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/nathancole/api/user/registry/UserRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/nathancole/api/user/registry/UserRegistry.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -22,17 +18,17 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/me/nathancole/api/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="16" column="30" selection-start-line="16" selection-start-column="30" selection-end-line="16" selection-end-column="30" />
+            <state relative-caret-position="459">
+              <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#236#237#0" expanded="true" />
-                <element signature="e#291#292#0" expanded="true" />
                 <element signature="e#400#401#0" expanded="true" />
                 <element signature="e#427#428#0" expanded="true" />
+                <element signature="e#741#742#0" expanded="true" />
+                <element signature="e#781#782#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -57,8 +53,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/me/nathancole/api/user/UserModel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="404">
-              <caret line="146" lean-forward="true" selection-start-line="146" selection-end-line="146" />
+            <state relative-caret-position="1543">
+              <caret line="149" column="50" lean-forward="true" selection-start-line="149" selection-start-column="50" selection-end-line="149" selection-end-column="50" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1672#1673#0" expanded="true" />
@@ -86,15 +82,14 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/me/nathancole/api/user/registry/UserRegistry.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="884">
-              <caret line="54" column="1" selection-start-line="54" selection-start-column="1" selection-end-line="54" selection-end-column="1" />
+            <state relative-caret-position="748">
+              <caret line="47" lean-forward="true" selection-start-line="47" selection-end-line="47" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1301#1302#0" expanded="true" />
-                <element signature="e#1360#1361#0" expanded="true" />
+                <element signature="e#1530#1531#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -103,8 +98,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/me/nathancole/api/user/registry/MUserRegistry.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="26" selection-start-line="2" selection-start-column="26" selection-end-line="2" selection-end-column="26" />
+            <state relative-caret-position="68">
+              <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
             </state>
           </provider>
         </entry>
@@ -207,8 +202,8 @@
         <option value="$PROJECT_DIR$/src/main/java/me/nathancole/api/datasection/Registry.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/nathancole/api/datasection/AbstractMongoRegistry.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/nathancole/api/datasection/DataSection.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/nathancole/api/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/nathancole/api/user/UserModel.java" />
+        <option value="$PROJECT_DIR$/src/main/java/me/nathancole/api/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/nathancole/api/user/registry/UserRegistry.java" />
       </list>
     </option>
@@ -348,7 +343,7 @@
       <option name="presentableId" value="Default" />
       <updated>1568156387696</updated>
       <workItem from="1568156389218" duration="2730000" />
-      <workItem from="1568320061291" duration="2192000" />
+      <workItem from="1568320061291" duration="2753000" />
     </task>
     <task id="LOCAL-00001" summary="Setup Web API">
       <created>1568157423908</created>
@@ -357,11 +352,25 @@
       <option name="project" value="LOCAL" />
       <updated>1568157423908</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Add UserModel &amp; UserRegistry">
+      <created>1568322363817</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1568322363817</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Add UserModel &amp; UserRegistry">
+      <created>1568322391652</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1568322391652</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4922000" />
+    <option name="totallyTimeSpent" value="5483000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="2575" height="1415" extended-state="6" />
@@ -407,7 +416,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Setup Web API" />
-    <option name="LAST_COMMIT_MESSAGE" value="Setup Web API" />
+    <MESSAGE value="Add UserModel &amp; UserRegistry" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add UserModel &amp; UserRegistry" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/pom.xml">
@@ -475,31 +485,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/nathancole/api/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="30" selection-start-line="16" selection-start-column="30" selection-end-line="16" selection-end-column="30" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#236#237#0" expanded="true" />
-            <element signature="e#291#292#0" expanded="true" />
-            <element signature="e#400#401#0" expanded="true" />
-            <element signature="e#427#428#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/me/nathancole/api/user/registry/MUserRegistry.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="26" selection-start-line="2" selection-start-column="26" selection-end-line="2" selection-end-column="26" />
+        <state relative-caret-position="68">
+          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/me/nathancole/api/user/UserModel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="404">
-          <caret line="146" lean-forward="true" selection-start-line="146" selection-end-line="146" />
+        <state relative-caret-position="1543">
+          <caret line="149" column="50" lean-forward="true" selection-start-line="149" selection-start-column="50" selection-end-line="149" selection-end-column="50" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1672#1673#0" expanded="true" />
@@ -528,12 +524,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/me/nathancole/api/user/registry/UserRegistry.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="884">
-          <caret line="54" column="1" selection-start-line="54" selection-start-column="1" selection-end-line="54" selection-end-column="1" />
+        <state relative-caret-position="748">
+          <caret line="47" lean-forward="true" selection-start-line="47" selection-end-line="47" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1301#1302#0" expanded="true" />
-            <element signature="e#1360#1361#0" expanded="true" />
+            <element signature="e#1530#1531#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/me/nathancole/api/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#400#401#0" expanded="true" />
+            <element signature="e#427#428#0" expanded="true" />
+            <element signature="e#741#742#0" expanded="true" />
+            <element signature="e#781#782#0" expanded="true" />
           </folding>
         </state>
       </provider>
