@@ -1,5 +1,6 @@
 package me.nathancole.api.user.registry;
 
+import me.nathancole.api.Main;
 import me.nathancole.api.datasection.DataSection;
 import me.nathancole.api.datasection.Registry;
 import me.nathancole.api.user.UserModel;
@@ -34,8 +35,12 @@ public interface UserRegistry extends Registry<UserModel> {
         String password = split[1];
 
         UserModel model = usernameLookup(username);
-        // TODO: Add Password Hashing System
-        return model;
+        if (model != null) {
+            String modelPasswordHash = model.getPasswordHash();
+            if (Main.getPasswordEncoder().matches(password, modelPasswordHash))
+                return model;
+        }
+        return null;
     }
 
     @Deprecated
