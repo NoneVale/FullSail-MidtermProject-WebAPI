@@ -7,6 +7,7 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoDatabase;
 import me.nathancole.api.user.UserFactory;
+import me.nathancole.api.user.UserModel;
 import me.nathancole.api.user.registry.MUserRegistry;
 import me.nathancole.api.user.registry.UserRegistry;
 import org.springframework.boot.SpringApplication;
@@ -41,11 +42,19 @@ public class Main {
             m_RegistryMap.put(String.valueOf(chars), userRegistry);
         }
         // UNREG = Unregistered
-        m_RegistryMap.put("UNREG", new MUserRegistry("UNREG", mongoDatabase));
+        UserRegistry unregRegistry = new MUserRegistry("UNREG", mongoDatabase);
+        unregRegistry.loadAllFromDb();
+        m_RegistryMap.put("UNREG", unregRegistry);
 
         m_PasswordEncoder = new SCryptPasswordEncoder();
 
         SpringApplication.run(Main.class, args);
+        UserModel userModel = getUserRegistry("W").usernameLookup("WilliamCole");
+        System.out.println(getPasswordEncoder().matches("HelloThere", userModel.getPasswordHash()));
+        System.out.println(getPasswordEncoder().matches("ThisISATest", userModel.getPasswordHash()));
+        System.out.println(getPasswordEncoder().matches("William917", userModel.getPasswordHash()));
+        System.out.println(getPasswordEncoder().matches("FinalTest", userModel.getPasswordHash()));
+
     }
 
     public static SCryptPasswordEncoder getPasswordEncoder() {
@@ -53,10 +62,14 @@ public class Main {
     }
 
     public static UserRegistry getUserRegistry(String p_Username) {
-        if (p_Username == null || p_Username.isEmpty()) {
+        if (p_Username == null || p_Username.isEmpty() || p_Username.equalsIgnoreCase("UNREG")) {
             return m_RegistryMap.get("UNREG");
         }
         
         return m_RegistryMap.get(String.valueOf(p_Username.toLowerCase().charAt(0)));
+    }
+
+    public static HashMap<String, UserRegistry> getRegistryMap() {
+        return m_RegistryMap;
     }
 }
