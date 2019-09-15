@@ -46,8 +46,8 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST, value ="registrations")
     public void registerUser(@RequestBody UserRegistrationModel registrationModel) {
         // Needed to add @RequestBody to this method (May have to remove later idk)
-        models.add(registrationModel);
-        UserFactory.createUser(registrationModel);
+        if (!usernameExists(registrationModel.getUsername()) && !emailExists(registrationModel.getEmail()))
+            UserFactory.createUser(registrationModel);
     }
 
     @RequestMapping("registration")
