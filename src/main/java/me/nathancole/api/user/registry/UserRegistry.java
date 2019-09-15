@@ -29,6 +29,14 @@ public interface UserRegistry extends Registry<UserModel> {
         return null;
     }
 
+    // Usernames & Passwords Can't be reused
+    default UserModel emailLookup(String email) {
+        for (UserModel model : getRegisteredData().values())
+            if (model.getEmail().equalsIgnoreCase(email))
+                return model;
+        return null;
+    }
+
     default UserModel getUser(String string) {
         String[] split = string.split(":-:");
         String username = split[0];
@@ -53,6 +61,13 @@ public interface UserRegistry extends Registry<UserModel> {
     default boolean usernameExists(String username) {
         for (UserModel model : getRegisteredData().values())
             if (model.getUsername().equalsIgnoreCase(username))
+                return true;
+        return false;
+    }
+
+    default boolean emailExists(String email) {
+        for (UserModel model : getRegisteredData().values())
+            if (model.getEmail().equalsIgnoreCase(email))
                 return true;
         return false;
     }
