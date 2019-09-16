@@ -5,7 +5,6 @@ import me.nathancole.api.Main;
 import me.nathancole.api.user.registry.UserRegistry;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 
 @RestController

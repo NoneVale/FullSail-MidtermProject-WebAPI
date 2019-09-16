@@ -6,8 +6,6 @@ import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoDatabase;
-import me.nathancole.api.user.UserFactory;
-import me.nathancole.api.user.UserModel;
 import me.nathancole.api.user.registry.MUserRegistry;
 import me.nathancole.api.user.registry.UserRegistry;
 import org.springframework.boot.SpringApplication;
