@@ -71,4 +71,15 @@ public class UserController {
         }
         return false;
     }
+
+    @RequestMapping("verify/{id}")
+    public String verify(@PathVariable String id) {
+        if (UserVerifyEmail.getUser(id) != null) {
+            UserVerifyEmail.getUser(id).setVerified(true);
+            UserVerifyEmail.removeVerifyLink(id);
+            return "Congratulations, your email address has been verified.  You can continue to use our application";
+        } else {
+            return "I'm sorry, but that verification link either does not exist or has expired.";
+        }
+    }
 }

@@ -6,6 +6,8 @@ import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoDatabase;
+import me.nathancole.api.email.EmailType;
+import me.nathancole.api.email.Mailer;
 import me.nathancole.api.user.registry.MUserRegistry;
 import me.nathancole.api.user.registry.UserRegistry;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +15,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
 import java.util.HashMap;
+import java.util.Timer;
 
 @SpringBootApplication
 public class Main {
@@ -22,7 +25,9 @@ public class Main {
 
     private static SCryptPasswordEncoder m_PasswordEncoder;
 
-    public static void main(String[] args) {
+    private static Timer timer;
+
+    public static void main(String[] args) throws Exception {
         String hostname = "167.114.114.217";
         String database = "testdb";
         String username = "admin";
@@ -47,6 +52,10 @@ public class Main {
         m_PasswordEncoder = new SCryptPasswordEncoder();
 
         SpringApplication.run(Main.class, args);
+
+        timer = new Timer();
+
+        Mailer.sendEmail(EmailType.REGISTRATION, getUserRegistry("nonevale").emailLookup("me@nonevale.me"));
     }
 
     public static SCryptPasswordEncoder getPasswordEncoder() {
@@ -63,5 +72,9 @@ public class Main {
 
     public static HashMap<String, UserRegistry> getRegistryMap() {
         return m_RegistryMap;
+    }
+
+    public static Timer getTimer() {
+        return timer;
     }
 }

@@ -20,6 +20,7 @@ public class UserModel implements Model {
     private int m_BirthDay;
     private int m_BirthMonth;
     private int m_BirthYear;
+    private int m_ForgotPasswordCode;
 
     private boolean m_Verified;
 
@@ -36,6 +37,7 @@ public class UserModel implements Model {
         this.m_BirthDay = 0;
         this.m_BirthMonth = 0;
         this.m_BirthYear = 0;
+        this.m_ForgotPasswordCode = -1;
 
         this.m_Verified = false;
 
@@ -53,6 +55,10 @@ public class UserModel implements Model {
         this.m_BirthDay = p_Data.getInt("birth-day");
         this.m_BirthMonth = p_Data.getInt("birth-month");
         this.m_BirthYear = p_Data.getInt("birth-year");
+        if (p_Data.isSet("forgot-password-code"))
+            this.m_ForgotPasswordCode = p_Data.getInt("forgot-password-code");
+        else
+            this.m_ForgotPasswordCode = -1;
 
         this.m_Verified = p_Data.getBoolean("verified");
 
@@ -129,6 +135,15 @@ public class UserModel implements Model {
 
     public void setBirthYear(int p_BirthYear) {
         this.m_BirthYear = p_BirthYear;
+        Main.getUserRegistry(getUsername()).register(this);
+    }
+
+    public int getForgotPasswordCode() {
+        return m_ForgotPasswordCode;
+    }
+
+    public void setForgotPasswordCode(int p_ForgotPasswordCode) {
+        this.m_ForgotPasswordCode = p_ForgotPasswordCode;
         Main.getUserRegistry(getUsername()).register(this);
     }
 
