@@ -8,6 +8,8 @@ import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoDatabase;
 import me.nathancole.api.email.EmailType;
 import me.nathancole.api.email.Mailer;
+import me.nathancole.api.user.UserFactory;
+import me.nathancole.api.user.UserForgotPassword;
 import me.nathancole.api.user.registry.MUserRegistry;
 import me.nathancole.api.user.registry.UserRegistry;
 import org.springframework.boot.SpringApplication;
@@ -15,6 +17,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
 import java.util.HashMap;
+import java.util.Random;
 import java.util.Timer;
 
 @SpringBootApplication
@@ -54,8 +57,6 @@ public class Main {
         SpringApplication.run(Main.class, args);
 
         timer = new Timer();
-
-        Mailer.sendEmail(EmailType.REGISTRATION, getUserRegistry("nonevale").emailLookup("me@nonevale.me"));
     }
 
     public static SCryptPasswordEncoder getPasswordEncoder() {

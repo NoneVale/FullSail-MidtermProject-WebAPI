@@ -1,6 +1,7 @@
 package me.nathancole.api.email;
 
 
+import me.nathancole.api.user.UserForgotPassword;
 import me.nathancole.api.user.UserModel;
 import me.nathancole.api.user.UserVerifyEmail;
 
@@ -11,80 +12,12 @@ import java.util.Properties;
 
 public class Mailer {
 
-    static final String FROM = "no-reply@nighthawkstudios.dev";
-    static final String FROMNAME = "The Social Hawk";
-
-    static final String TO = "me@nonevale.me";
-
     static final String SMTP_USERNAME = "SMTP_Injection";
 
     static final String SMTP_PASSWORD = "c4aff8f9055eb9c458f69e73ad56023ccb04c0f4";
 
-    static final String CONFIGSET = "ConfigSet";
-
     static final String HOST = "smtp.sparkpostmail.com";
 
-    static final int PORT = 587;
-
-    static final String SUBJECT = "The Social Hawk Test Email";
-
-    static final String BODY = String.join(
-            System.getProperty("line.separator"),
-            "<html>\n" +
-                    "<head>\n" +
-                    "</head>\n" +
-                    "\n" +
-                    "<body style=\"font-family: Arial; font-size: 12px;\">\n" +
-                    "<div>\n" +
-                    "    <p>\n" +
-                    "        You have requested a password reset, please enter the code below to reset your password.\n" +
-                    "    </p>\n" +
-                    "    <p>\n" +
-                    "        Please ignore this email if you did not request a password change.\n" +
-                    "    </p>\n" +
-                    "\n" +
-                    "    <p>\n" +
-                    "        <p>\n" +
-                    "            Use this code to reset your password.\n" +
-                    "        </p>\n" +
-                    "    </p>\n" +
-                    "</div>\n" +
-                    "</body>\n" +
-                    "</html>"
-    );
-
-    public static void send() throws Exception {
-        Properties properties = System.getProperties();
-        properties.put("mail.transport.protocol", "smtp");
-        properties.put("mail.smtp.port", PORT);
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.auth", "true");
-
-        Session session = Session.getDefaultInstance(properties);
-
-        MimeMessage msg = new MimeMessage(session);
-        msg.setFrom(new InternetAddress(FROM, FROMNAME));
-        msg.setRecipient(Message.RecipientType.TO, new InternetAddress(TO));
-        msg.setSubject(SUBJECT);
-        msg.setContent(BODY, "text/html");
-
-        msg.setHeader("X-SES-CONFIGURATION-SET", CONFIGSET);
-
-        Transport transport = session.getTransport();
-
-        try
-        {
-            transport.connect(HOST, SMTP_USERNAME, SMTP_PASSWORD);
-            transport.sendMessage(msg, msg.getAllRecipients());
-        }
-        catch (Exception ex) {
-            System.out.println("Error message: " + ex.getMessage());
-        }
-        finally
-        {
-            transport.close();
-        }
-    }
 
     public static void sendEmail(EmailType type, UserModel userModel) throws Exception {
 
@@ -106,7 +39,7 @@ public class Mailer {
                                 "    </p>" +
                                 "" +
                                 "    <p>" +
-                                "        <a href=\"" + UserVerifyEmail.getVerificationLink(userModel) + "\'>" +
+                                "        <a href=\"" + UserVerifyEmail.getVerificationLink(userModel) + "\">" +
                                 "            Follow this link to verify your email address.\n" +
                                 "        </a>" +
                                 "    </p>" +
@@ -116,6 +49,7 @@ public class Mailer {
                 break;
             case FORGOT_PASSWORD:
                 subject = "Forgot Password - Hawkeye";
+                UserForgotPassword.createPasswordCode(userModel);
                 body = String.join(System.getProperty("line.separator"),
                         "<html>" +
                                 "" +
@@ -130,7 +64,7 @@ public class Mailer {
                                 "" +
                                 "    <p>" +
                                 "        <h1>" +
-                                "            " + userModel.getForgotPasswordCode() + "" +
+                                "            " + UserForgotPassword.getPasswordCode(userModel) + "" +
                                 "        </h1>" +
                                 "        <p>" +
                                 "            Use this code to reset your password.\n" +

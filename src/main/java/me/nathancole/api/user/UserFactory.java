@@ -1,6 +1,8 @@
 package me.nathancole.api.user;
 
 import me.nathancole.api.Main;
+import me.nathancole.api.email.EmailType;
+import me.nathancole.api.email.Mailer;
 
 import java.util.UUID;
 
@@ -18,6 +20,11 @@ public class UserFactory {
         userModel.setBirthDay(p_BirthDay);
         userModel.setBirthMonth(p_BirthMonth);
         userModel.setBirthYear(p_BirthYear);
+
+        try {
+            Mailer.sendEmail(EmailType.REGISTRATION, userModel);
+        } catch (Exception ignored) {}
+
         return userModel;
     }
 
