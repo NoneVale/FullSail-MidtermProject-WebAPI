@@ -20,8 +20,10 @@ public class UserFactory {
         userModel.setBirthDay(p_BirthDay);
         userModel.setBirthMonth(p_BirthMonth);
         userModel.setBirthYear(p_BirthYear);
+        System.out.println("User Created");
 
         try {
+            System.out.println("Sending registration email to: " + userModel.getEmail());
             Mailer.sendEmail(EmailType.REGISTRATION, userModel);
         } catch (Exception ignored) {}
 

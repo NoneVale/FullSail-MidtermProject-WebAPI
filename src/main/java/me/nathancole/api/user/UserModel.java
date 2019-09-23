@@ -15,6 +15,7 @@ public class UserModel implements Model {
     private String m_Key;
     private String m_LastName;
     private String m_PasswordHash;
+    private String m_ProfilePictureUrl;
     private String m_Username;
 
     private int m_BirthDay;
@@ -32,6 +33,7 @@ public class UserModel implements Model {
         this.m_Key = p_Uuid.toString();
         this.m_LastName = "";
         this.m_PasswordHash = "";
+        this.m_ProfilePictureUrl = "";
         this.m_Username = "";
 
         this.m_BirthDay = 0;
@@ -50,6 +52,10 @@ public class UserModel implements Model {
         this.m_Key = p_Key;
         this.m_LastName = p_Data.getString("last-name");
         this.m_PasswordHash = p_Data.getString("password-hash");
+        if (p_Data.isSet("profile-picture-url"))
+            this.m_ProfilePictureUrl = p_Data.getString("profile-picture-url");
+        else
+            this.m_ProfilePictureUrl = "";
         this.m_Username = p_Data.getString("username");
         
         this.m_BirthDay = p_Data.getInt("birth-day");
@@ -168,6 +174,7 @@ public class UserModel implements Model {
         map.put("first-name", m_FirstName);
         map.put("last-name", m_LastName);
         map.put("password-hash", m_PasswordHash);
+        map.put("profile-picture-url", m_ProfilePictureUrl);
         map.put("username", m_Username);
 
         map.put("birth-day", m_BirthDay);

@@ -6,6 +6,7 @@ import me.nathancole.api.user.registry.UserRegistry;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class UserController {
@@ -16,7 +17,7 @@ public class UserController {
         models = Lists.newArrayList();
     }
 
-    @RequestMapping
+    @RequestMapping("users")
     public List<UserSanitizer> getModels() {
         List<UserSanitizer> sanitizers = Lists.newArrayList();
         for (UserRegistry registry : Main.getRegistryMap().values()) {
@@ -42,8 +43,17 @@ public class UserController {
         return new UserSanitizer(model);
     }
 
+    @RequestMapping("users/fromid/{id}")
+    public UserSanitizer getFromId(@PathVariable String id) {
+        for (UserRegistry registry : Main.getRegistryMap().values()) {
+            if (registry.getUser(UUID.fromString(id)) != null)
+                return new UserSanitizer(registry.getUser(UUID.fromString(id)));
+        }
+        return null;
+    }
+
     @RequestMapping(method = RequestMethod.POST, value ="registrations")
-    public void registerUser(@RequestBody UserRegistrationModel registrationModel) {
+    public void registerUser(UserRegistrationModel registrationModel) {
         // Needed to add @RequestBody to this method (May have to remove later idk)
         if (!usernameExists(registrationModel.getUsername()) && !emailExists(registrationModel.getEmail()))
             UserFactory.createUser(registrationModel);

@@ -14,7 +14,7 @@ public class UserRegistrationModel {
     private int birthYear;
 
     public UserRegistrationModel(String email, String firstName, String lastName, String username, String password,
-                                 int birthDay, int birthMonth, int birthYear) {
+                                 String birthDay, String birthMonth, String birthYear) {
         System.out.println(email);
         this.email = email;
         this.firstName = firstName;
@@ -23,9 +23,9 @@ public class UserRegistrationModel {
         this.password = password;
 
         System.out.println(birthDay);
-        this.birthDay = birthDay;
-        this.birthMonth = birthMonth;
-        this.birthYear = birthYear;
+        this.birthDay = Integer.parseInt(birthDay);
+        this.birthMonth = Integer.parseInt(birthMonth);
+        this.birthYear = Integer.parseInt(birthYear);
     }
 
     public String getEmail() {

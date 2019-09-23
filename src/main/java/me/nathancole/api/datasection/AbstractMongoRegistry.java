@@ -89,7 +89,6 @@ public abstract class AbstractMongoRegistry<T extends Model> implements Registry
                 String key = document.getString("key");
                 if (key != null) {
                     try {
-                        UUID.fromString(key);
                         m_RegisteredData.put(key, fromDataSection(key, new MJsonSection(document)));
                     } catch (Exception oops) {
                         oops.printStackTrace();

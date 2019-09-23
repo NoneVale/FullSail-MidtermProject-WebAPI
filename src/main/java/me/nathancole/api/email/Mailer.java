@@ -24,6 +24,7 @@ public class Mailer {
         String subject = "", body = "";
         switch (type) {
             case REGISTRATION:
+                System.out.println("Formatting Message");
                 UserVerifyEmail.createVerifyLink(userModel);
                 subject = "Registration - Hawkeye";
                 body = String.join(System.getProperty("line.separator"),
@@ -93,7 +94,6 @@ public class Mailer {
 
         MimeMessage message = new MimeMessage(session);
         message.setFrom(new InternetAddress("no-reply@nighthawkstudios.dev", "Hawkeye"));
-        System.out.println(userModel.getEmail());
         message.setRecipient(Message.RecipientType.TO, new InternetAddress(userModel.getEmail()));
         message.setSubject(subject);
         message.setContent(body, "text/html");
@@ -102,8 +102,11 @@ public class Mailer {
 
         try
         {
+            System.out.println("Connecting to Transport");
             transport.connect(HOST, SMTP_USERNAME, SMTP_PASSWORD);
+            System.out.println("Sending Email");
             transport.sendMessage(message, message.getAllRecipients());
+            System.out.println("Email Sent!");
         }
         catch (Exception ex) {
             System.out.println("Error message: " + ex.getMessage());
