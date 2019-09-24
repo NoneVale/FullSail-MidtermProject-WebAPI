@@ -1,10 +1,13 @@
 package me.nathancole.api.user;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import me.nathancole.api.Main;
 import me.nathancole.api.datasection.DataSection;
 import me.nathancole.api.datasection.Model;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -21,11 +24,12 @@ public class UserModel implements Model {
     private int m_BirthDay;
     private int m_BirthMonth;
     private int m_BirthYear;
-    private int m_ForgotPasswordCode;
 
     private boolean m_Verified;
 
-    private UUID m_Uuid;
+    private List<UserModel> m_Followers;
+    private List<UserModel> m_Following;
+    private List<UserModel> m_FollowRequests;
 
     public UserModel(UUID p_Uuid) {
         this.m_Email = "";
@@ -39,11 +43,12 @@ public class UserModel implements Model {
         this.m_BirthDay = 0;
         this.m_BirthMonth = 0;
         this.m_BirthYear = 0;
-        this.m_ForgotPasswordCode = -1;
 
         this.m_Verified = false;
 
-        this.m_Uuid = p_Uuid;
+        this.m_Followers = Lists.newArrayList();
+        this.m_Following = Lists.newArrayList();
+        this.m_FollowRequests = Lists.newArrayList();
     }
 
     public UserModel(String p_Key, DataSection p_Data) {
@@ -61,14 +66,18 @@ public class UserModel implements Model {
         this.m_BirthDay = p_Data.getInt("birth-day");
         this.m_BirthMonth = p_Data.getInt("birth-month");
         this.m_BirthYear = p_Data.getInt("birth-year");
-        if (p_Data.isSet("forgot-password-code"))
-            this.m_ForgotPasswordCode = p_Data.getInt("forgot-password-code");
-        else
-            this.m_ForgotPasswordCode = -1;
 
         this.m_Verified = p_Data.getBoolean("verified");
 
-        this.m_Uuid = UUID.fromString(p_Key);
+        this.m_Followers = Lists.newArrayList();
+        if (p_Data.isSet("followers"))
+            p_Data.getStringList("followers").forEach(id -> this.m_Followers.add(Main.getUserById(id)));
+        this.m_Following = Lists.newArrayList();
+        if (p_Data.isSet("following"))
+            p_Data.getStringList("following").forEach(id -> this.m_Following.add(Main.getUserById(id)));
+        this.m_FollowRequests = Lists.newArrayList();
+        if (p_Data.isSet("follow-requests"))
+            p_Data.getStringList("follow-requests").forEach(id -> this.m_FollowRequests.add(Main.getUserById(id)));
     }
 
     public String getEmail() {
@@ -144,21 +153,54 @@ public class UserModel implements Model {
         Main.getUserRegistry(getUsername()).register(this);
     }
 
-    public int getForgotPasswordCode() {
-        return m_ForgotPasswordCode;
-    }
-
-    public void setForgotPasswordCode(int p_ForgotPasswordCode) {
-        this.m_ForgotPasswordCode = p_ForgotPasswordCode;
-        Main.getUserRegistry(getUsername()).register(this);
-    }
-
     public boolean isVerified() {
         return m_Verified;
     }
 
     public void setVerified(boolean p_Verified) {
         this.m_Verified = p_Verified;
+        Main.getUserRegistry(getUsername()).register(this);
+    }
+
+    public ImmutableList<UserModel> getFollowers() {
+        return ImmutableList.copyOf(m_Followers);
+    }
+
+    public void addFollower(UserModel userModel) {
+        m_Followers.add(userModel);
+        Main.getUserRegistry(getUsername()).register(this);
+    }
+
+    public void removeFollower(UserModel userModel) {
+        m_Followers.remove(userModel);
+        Main.getUserRegistry(getUsername()).register(this);
+    }
+
+    public ImmutableList<UserModel> getFollowing() {
+        return ImmutableList.copyOf(m_Following);
+    }
+
+    public void follow(UserModel userModel) {
+        m_Following.add(userModel);
+        Main.getUserRegistry(getUsername()).register(this);
+    }
+
+    public void unfollow(UserModel userModel) {
+        m_Following.remove(userModel);
+        Main.getUserRegistry(getUsername()).register(this);
+    }
+
+    public ImmutableList<UserModel> getFollowRequest() {
+        return ImmutableList.copyOf(m_FollowRequests);
+    }
+
+    public void addFollowRequest(UserModel userModel) {
+        m_FollowRequests.add(userModel);
+        Main.getUserRegistry(getUsername()).register(this);
+    }
+
+    public void removeFollowRequest(UserModel userModel) {
+        m_FollowRequests.remove(userModel);
         Main.getUserRegistry(getUsername()).register(this);
     }
 
@@ -180,6 +222,16 @@ public class UserModel implements Model {
         map.put("birth-day", m_BirthDay);
         map.put("birth-month", m_BirthMonth);
         map.put("birth-year", m_BirthYear);
+
+        List<String> followersIds = Lists.newArrayList();
+        m_Followers.forEach(userModel -> followersIds.add(userModel.getKey()));
+        map.put("followers", followersIds);
+        List<String> followingIds = Lists.newArrayList();
+        m_Following.forEach(userModel -> followingIds.add(userModel.getKey()));
+        map.put("following", followingIds);
+        List<String> followRequestIds = Lists.newArrayList();
+        m_FollowRequests.forEach(userModel -> followRequestIds.add(userModel.getKey()));
+        map.put("follow-requests", followRequestIds);
 
         map.put("verified", m_Verified);
         return map;

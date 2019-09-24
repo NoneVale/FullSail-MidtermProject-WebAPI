@@ -102,11 +102,8 @@ public class Mailer {
 
         try
         {
-            System.out.println("Connecting to Transport");
             transport.connect(HOST, SMTP_USERNAME, SMTP_PASSWORD);
-            System.out.println("Sending Email");
             transport.sendMessage(message, message.getAllRecipients());
-            System.out.println("Email Sent!");
         }
         catch (Exception ex) {
             System.out.println("Error message: " + ex.getMessage());

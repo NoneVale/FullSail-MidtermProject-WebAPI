@@ -20,7 +20,7 @@ public class UserController {
     @RequestMapping("users")
     public List<UserSanitizer> getModels() {
         List<UserSanitizer> sanitizers = Lists.newArrayList();
-        for (UserRegistry registry : Main.getRegistryMap().values()) {
+        for (UserRegistry registry : Main.getUserRegistryMap().values()) {
             for (UserModel model : registry.getRegisteredData().values()) {
                 sanitizers.add(new UserSanitizer(model));
             }
@@ -45,7 +45,7 @@ public class UserController {
 
     @RequestMapping("users/fromid/{id}")
     public UserSanitizer getFromId(@PathVariable String id) {
-        for (UserRegistry registry : Main.getRegistryMap().values()) {
+        for (UserRegistry registry : Main.getUserRegistryMap().values()) {
             if (registry.getUser(UUID.fromString(id)) != null)
                 return new UserSanitizer(registry.getUser(UUID.fromString(id)));
         }
@@ -66,7 +66,7 @@ public class UserController {
 
     @RequestMapping("username-lookup/{username}")
     public boolean usernameExists(@PathVariable String username) {
-        for (UserRegistry registry : Main.getRegistryMap().values()) {
+        for (UserRegistry registry : Main.getUserRegistryMap().values()) {
             if (registry.usernameExists(username))
                 return true;
         }
@@ -75,7 +75,7 @@ public class UserController {
 
     @RequestMapping("email-lookup/{email}")
     public boolean emailExists(@PathVariable String email) {
-        for (UserRegistry registry : Main.getRegistryMap().values()) {
+        for (UserRegistry registry : Main.getUserRegistryMap().values()) {
             if (registry.emailExists(email))
                 return true;
         }
