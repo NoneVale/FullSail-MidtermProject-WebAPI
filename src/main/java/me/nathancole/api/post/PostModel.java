@@ -1,6 +1,8 @@
 package me.nathancole.api.post;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import me.nathancole.api.Main;
 import me.nathancole.api.datasection.DataSection;
 import me.nathancole.api.datasection.Model;
@@ -56,6 +58,61 @@ public class PostModel implements Model {
         this.m_Author = Main.getUserById(p_Data.getString("author"));
     }
 
+    public String getBody() {
+        return m_Body;
+    }
+
+    public void setBody(String p_Body) {
+        this.m_Body = p_Body;
+        Main.getPostRegistry(getAuthor().getKey()).register(this);
+    }
+
+    public ImmutableList<CommentModel> getComments() {
+        return ImmutableList.copyOf(m_Comments);
+    }
+
+    public void addComment(CommentModel p_Comment) {
+        m_Comments.add(p_Comment);
+        Main.getPostRegistry(getAuthor().getKey()).register(this);
+    }
+
+    public void removeComment(CommentModel p_Comment) {
+        m_Comments.remove(p_Comment);
+        Main.getPostRegistry(getAuthor().getKey()).register(this);
+    }
+
+    public ImmutableList<UserModel> getLikes() {
+        return ImmutableList.copyOf(m_Likes);
+    }
+
+    public void addLike(UserModel p_UserModel) {
+        m_Likes.add(p_UserModel);
+        Main.getPostRegistry(getAuthor().getKey()).register(this);
+    }
+
+    public void removeLike(UserModel p_UserModel) {
+        m_Likes.remove(p_UserModel);
+        Main.getPostRegistry(getAuthor().getKey()).register(this);
+    }
+
+    public long getPostTime() {
+        return m_PostTime;
+    }
+
+    public void setPostTime(long p_PostTime) {
+        m_PostTime = p_PostTime;
+        Main.getPostRegistry(getAuthor().getKey()).register(this);
+    }
+
+    public UserModel getAuthor() {
+        return m_Author;
+    }
+
+    public void setAuthor(UserModel p_Author) {
+        m_Author = p_Author;
+        Main.getPostRegistry(getAuthor().getKey()).register(this);
+    }
+
     @Override
     public String getKey() {
         return this.m_Key;
@@ -63,6 +120,19 @@ public class PostModel implements Model {
 
     @Override
     public Map<String, Object> serialize() {
-        return null;
+        Map<String, Object> map = Maps.newHashMap();
+        map.put("body", m_Body);
+
+        List<String> commentIds = Lists.newArrayList();
+        m_Comments.forEach(comment -> commentIds.add(comment.getKey()));
+        map.put("comments", commentIds);
+        List<String> likeIds = Lists.newArrayList();
+        m_Likes.forEach(user -> likeIds.add(user.getKey()));
+        map.put("likes", likeIds);
+
+        map.put("post-time", m_PostTime);
+
+        map.put("author", m_Author.getKey());
+        return map;
     }
 }

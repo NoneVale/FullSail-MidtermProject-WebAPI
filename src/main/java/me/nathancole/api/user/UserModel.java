@@ -116,6 +116,15 @@ public class UserModel implements Model {
         Main.getUserRegistry(getUsername()).register(this);
     }
 
+    public String getProfilePictureUrl() {
+        return m_ProfilePictureUrl;
+    }
+
+    public void setProfilePictureUrl(String p_ProfilePictureUrl) {
+        this.m_ProfilePictureUrl = p_ProfilePictureUrl;
+        Main.getUserRegistry(getUsername()).register(this);
+    }
+
     public String getUsername() {
         return m_Username;
     }
