@@ -112,6 +112,13 @@ public class Main {
         return m_PostRegistryMap.get(p_Id);
     }
 
+    public static CommentRegistry getCommentRegistry(String p_Id) {
+        if (p_Id == null || p_Id.isEmpty() || p_Id.equalsIgnoreCase("UNREG")) {
+            return m_CommentRegistryMap.get("UNREG");
+        }
+        return m_CommentRegistryMap.get(p_Id);
+    }
+
     public static HashMap<String, UserRegistry> getUserRegistryMap() {
         return m_UserRegistryMap;
     }

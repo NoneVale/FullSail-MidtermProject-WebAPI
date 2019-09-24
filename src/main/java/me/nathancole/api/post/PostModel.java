@@ -72,6 +72,7 @@ public class PostModel implements Model {
     }
 
     public void addComment(CommentModel p_Comment) {
+        p_Comment.setPostId(getKey());
         m_Comments.add(p_Comment);
         Main.getPostRegistry(getAuthor().getKey()).register(this);
     }
