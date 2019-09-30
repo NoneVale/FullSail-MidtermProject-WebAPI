@@ -191,6 +191,7 @@ public class UserModel implements Model {
 
     public void follow(UserModel userModel) {
         m_Following.add(userModel);
+        userModel.addFollower(this);
         Main.getUserRegistry(getUsername()).register(this);
     }
 

@@ -6,7 +6,6 @@ import com.google.common.collect.Maps;
 import me.nathancole.api.Main;
 import me.nathancole.api.datasection.DataSection;
 import me.nathancole.api.datasection.Model;
-import me.nathancole.api.post.PostModel;
 import me.nathancole.api.user.UserModel;
 
 import java.util.List;
@@ -23,20 +22,18 @@ public class CommentModel implements Model {
 
     private long m_PostTime;
 
-    private PostModel m_Post;
-
     private UserModel m_Author;
 
-    public CommentModel(UUID uuid) {
+    public CommentModel(UUID p_Uuid, UserModel p_Author) {
         this.m_Body = "";
-        this.m_Key = uuid.toString();
+        this.m_Key = p_Uuid.toString();
         this.m_PostId = "";
 
         this.m_Likes = Lists.newArrayList();
 
         this.m_PostTime = 0L;
 
-        this.m_Author = null;
+        this.m_Author = p_Author;
     }
 
     public CommentModel(String p_Key, DataSection p_Data) {

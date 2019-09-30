@@ -92,4 +92,13 @@ public class UserController {
             return "I'm sorry, but that verification link either does not exist or has expired.";
         }
     }
+
+    @RequestMapping("users/byid/{id}")
+    public UserSanitizer fromId(@PathVariable String id) {
+        for (UserRegistry registry : Main.getUserRegistryMap().values()) {
+            if (registry.userExists(UUID.fromString(id)))
+                return new UserSanitizer(registry.getUser(UUID.fromString(id)));
+        }
+        return null;
+    }
 }

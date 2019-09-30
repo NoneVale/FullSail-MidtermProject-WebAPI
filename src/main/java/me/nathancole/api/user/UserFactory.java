@@ -3,6 +3,8 @@ package me.nathancole.api.user;
 import me.nathancole.api.Main;
 import me.nathancole.api.email.EmailType;
 import me.nathancole.api.email.Mailer;
+import me.nathancole.api.post.registry.MPostRegistry;
+import me.nathancole.api.post.registry.PostRegistry;
 
 import java.util.UUID;
 
@@ -20,6 +22,11 @@ public class UserFactory {
         userModel.setBirthDay(p_BirthDay);
         userModel.setBirthMonth(p_BirthMonth);
         userModel.setBirthYear(p_BirthYear);
+
+        //Create a Post Registry for the User when they are created :))
+        PostRegistry postRegistry = new MPostRegistry(userModel.getKey(), Main.getPostDatabase());
+        postRegistry.loadAllFromDb();
+        Main.getPostRegistryMap().put(userModel.getKey(), postRegistry);
 
         try {
             Mailer.sendEmail(EmailType.REGISTRATION, userModel);

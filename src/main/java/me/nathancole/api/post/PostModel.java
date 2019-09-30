@@ -27,7 +27,7 @@ public class PostModel implements Model {
 
     private UserModel m_Author;
 
-    public PostModel(UUID p_Uuid) {
+    public PostModel(UUID p_Uuid, UserModel p_Author) {
         this.m_Body = "";
         this.m_Key = p_Uuid.toString();
 
@@ -36,10 +36,12 @@ public class PostModel implements Model {
 
         this.m_PostTime = 0L;
 
-        this.m_Author = null;
+        this.m_Author = p_Author;
     }
 
     public PostModel(String p_Key, DataSection p_Data) {
+        this.m_Author = Main.getUserById(p_Data.getString("author"));
+
         this.m_Body = p_Data.getString("body");
         this.m_Key = p_Key;
 
@@ -48,14 +50,13 @@ public class PostModel implements Model {
         commentRegistry.loadAllFromDb();
         Main.getCommentRegistryMap().put(this.m_Key, commentRegistry);
         this.m_Comments = Lists.newArrayList();
-        p_Data.getStringList("comments").forEach(id -> this.m_Comments.add(commentRegistry.getComment(UUID.fromString(id))));
+        p_Data.getStringList("comments").forEach(id -> this.m_Comments.add(commentRegistry.getComment(UUID.fromString(id), this.m_Author)));
 
         this.m_Likes = Lists.newArrayList();
         p_Data.getStringList("likes").forEach(id -> this.m_Likes.add(Main.getUserById(id)));
 
         this.m_PostTime = p_Data.getLong("post-time");
 
-        this.m_Author = Main.getUserById(p_Data.getString("author"));
     }
 
     public String getBody() {

@@ -3,6 +3,9 @@ package me.nathancole.api;
 import com.google.common.collect.Maps;
 import com.mongodb.*;
 import com.mongodb.client.MongoDatabase;
+import me.nathancole.api.post.PostController;
+import me.nathancole.api.post.PostModel;
+import me.nathancole.api.post.PostSanitizer;
 import me.nathancole.api.post.comment.registry.CommentRegistry;
 import me.nathancole.api.post.registry.MPostRegistry;
 import me.nathancole.api.post.registry.PostRegistry;
@@ -27,6 +30,7 @@ public class Main {
     private static HashMap<String, UserRegistry> m_UserRegistryMap;
 
     private static MongoDatabase m_CommentDatabase;
+    private static MongoDatabase m_PostDatabase;
 
     private static SCryptPasswordEncoder m_PasswordEncoder;
 
@@ -62,15 +66,15 @@ public class Main {
 
         // Create & Load All Post Databases for each user.  Each user has their own post database.
         credential = MongoCredential.createCredential(username, "hawkeye_posts", password.toCharArray());
-        mongoDatabase = new MongoClient(address, credential, new MongoClientOptions.Builder().build()).getDatabase("hawkeye_posts");
+        m_PostDatabase = new MongoClient(address, credential, new MongoClientOptions.Builder().build()).getDatabase("hawkeye_posts");
         for (UserRegistry userRegistry : getUserRegistryMap().values()) {
             for (UserModel userModel : userRegistry.getRegisteredData().values()) {
-                PostRegistry postRegistry = new MPostRegistry(userModel.getKey(), mongoDatabase);
+                PostRegistry postRegistry = new MPostRegistry(userModel.getKey(), m_PostDatabase);
                 postRegistry.loadAllFromDb();
                 m_PostRegistryMap.put(userModel.getKey(), postRegistry);
             }
         }
-        PostRegistry unregPostRegistry = new MPostRegistry("UNREG", mongoDatabase);
+        PostRegistry unregPostRegistry = new MPostRegistry("UNREG", m_PostDatabase);
         unregPostRegistry.loadAllFromDb();
         m_PostRegistryMap.put("UNREG", unregPostRegistry);
 
@@ -95,6 +99,10 @@ public class Main {
 
     public static MongoDatabase getCommentDatabase() {
         return m_CommentDatabase;
+    }
+
+    public static MongoDatabase getPostDatabase() {
+        return m_PostDatabase;
     }
 
     public static HashMap<String, CommentRegistry> getCommentRegistryMap() {
@@ -129,7 +137,7 @@ public class Main {
 
     public static UserModel getUserById(String id) {
         for (UserRegistry registry : getUserRegistryMap().values()) {
-            if (registry.getUser(UUID.fromString(id)) != null) {
+            if (registry.userExists(UUID.fromString(id))) {
                 return registry.getUser(UUID.fromString(id));
             }
         }

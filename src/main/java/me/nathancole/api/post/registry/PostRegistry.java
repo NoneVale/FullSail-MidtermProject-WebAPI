@@ -3,7 +3,9 @@ package me.nathancole.api.post.registry;
 import me.nathancole.api.datasection.DataSection;
 import me.nathancole.api.datasection.Registry;
 import me.nathancole.api.post.PostModel;
+import me.nathancole.api.user.UserModel;
 
+import java.util.Map;
 import java.util.UUID;
 
 public interface PostRegistry extends Registry<PostModel> {
@@ -12,9 +14,12 @@ public interface PostRegistry extends Registry<PostModel> {
         return new PostModel(key, section);
     }
 
-    default PostModel getPost(UUID uuid) {
+    default PostModel getPost(UUID uuid, UserModel userModel) {
         if (uuid == null)
             return null;
-        return fromKey(uuid.toString()).orElseGet(() -> register(new PostModel(uuid)));
+        return fromKey(uuid.toString()).orElseGet(() -> register(new PostModel(uuid, userModel)));
     }
+
+    @Deprecated
+    Map<String, PostModel> getRegisteredData();
 }
