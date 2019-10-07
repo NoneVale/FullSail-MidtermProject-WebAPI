@@ -5,17 +5,12 @@ import me.nathancole.api.Main;
 import me.nathancole.api.user.registry.UserRegistry;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
 @RestController
 public class UserController {
-
-    public static List<UserRegistrationModel> models;
-
-    static {
-        models = Lists.newArrayList();
-    }
 
     @RequestMapping("users")
     public List<UserSanitizer> getModels() {
@@ -28,41 +23,14 @@ public class UserController {
         return sanitizers;
     }
 
-    @RequestMapping("users/{section}")
-    public List<UserSanitizer> getModels(@PathVariable String section) {
-        List<UserSanitizer> sanitizers = Lists.newArrayList();
-        for (UserModel model : Main.getUserRegistry(section).getRegisteredData().values()) {
-            sanitizers.add(new UserSanitizer(model));
-        }
-        return sanitizers;
-    }
-
-    @RequestMapping("users/{section}/{id}")
-    public UserSanitizer getSanitizer(@PathVariable String section, @PathVariable String id) {
-        UserModel model = Main.getUserRegistry(section).getUser(id);
-        return new UserSanitizer(model);
-    }
-
-    @RequestMapping("users/fromid/{id}")
-    public UserSanitizer getFromId(@PathVariable String id) {
-        for (UserRegistry registry : Main.getUserRegistryMap().values()) {
-            if (registry.getUser(UUID.fromString(id)) != null)
-                return new UserSanitizer(registry.getUser(UUID.fromString(id)));
-        }
-        return null;
-    }
-
+    // REGISTRATION METHODS
     @RequestMapping(method = RequestMethod.POST, value ="registrations")
     public void registerUser(UserRegistrationModel registrationModel) {
-        // Needed to add @RequestBody to this method (May have to remove later idk)
         if (!usernameExists(registrationModel.getUsername()) && !emailExists(registrationModel.getEmail()))
             UserFactory.createUser(registrationModel);
     }
 
-    @RequestMapping("registration")
-    public List<UserRegistrationModel> getRegistrationModels() {
-        return models;
-    }
+    // LOOKUP METHODS
 
     @RequestMapping("username-lookup/{username}")
     public boolean usernameExists(@PathVariable String username) {
@@ -82,6 +50,42 @@ public class UserController {
         return false;
     }
 
+
+    @RequestMapping("users/byid/{id}")
+    public UserSanitizer fromId(@PathVariable String id) {
+        for (UserRegistry registry : Main.getUserRegistryMap().values()) {
+            if (registry.userExists(UUID.fromString(id)))
+                return new UserSanitizer(registry.getUser(UUID.fromString(id)));
+        }
+        return null;
+    }
+
+    @RequestMapping("users/{section}")
+    public List<UserSanitizer> getModels(@PathVariable String section) {
+        List<UserSanitizer> sanitizers = Lists.newArrayList();
+        for (UserModel model : Main.getUserRegistry(section).getRegisteredData().values()) {
+            sanitizers.add(new UserSanitizer(model));
+        }
+        return sanitizers;
+    }
+
+    @RequestMapping("users/{section}/{key}")
+    public UserSanitizer getSanitizer(@PathVariable String section, @PathVariable String key) {
+        UserModel model = Main.getUserRegistry(section).getUser(key);
+        return new UserSanitizer(model);
+    }
+
+    @RequestMapping("users/fromid/{id}")
+    public UserSanitizer getFromId(@PathVariable String id) {
+        for (UserRegistry registry : Main.getUserRegistryMap().values()) {
+            if (registry.getUser(UUID.fromString(id)) != null)
+                return new UserSanitizer(registry.getUser(UUID.fromString(id)));
+        }
+        return null;
+    }
+
+    // EMAIL VERIFICATION METHOD
+
     @RequestMapping("verify/{id}")
     public String verify(@PathVariable String id) {
         if (UserVerifyEmail.getUser(id) != null) {
@@ -93,12 +97,37 @@ public class UserController {
         }
     }
 
-    @RequestMapping("users/byid/{id}")
-    public UserSanitizer fromId(@PathVariable String id) {
-        for (UserRegistry registry : Main.getUserRegistryMap().values()) {
-            if (registry.userExists(UUID.fromString(id)))
-                return new UserSanitizer(registry.getUser(UUID.fromString(id)));
+    // FOLLOW METHODS
+
+    @RequestMapping (method = RequestMethod.POST, value = "follow/{following}")
+    public void follow(@PathVariable String following, @RequestBody String follower) {
+        UserModel followingModel = Main.getUserById(following), followerModel = Main.getUserById(follower);
+        followingModel.addFollower(followerModel);
+        followerModel.follow(followingModel);
+    }
+
+    @RequestMapping (method = RequestMethod.POST, value = "unfollow/{following}")
+    public void unfollow(@PathVariable String following, @RequestBody String follower) {
+        UserModel followingModel = Main.getUserById(following), followerModel = Main.getUserById(follower);
+        followingModel.removeFollower(followerModel);
+        followerModel.unfollow(followingModel);
+    }
+
+    // SEARCH METHODS
+
+    @RequestMapping("search/{keyword}")
+    public List<UserSanitizer> getResults(@PathVariable String keyword) {
+        if (keyword == null || keyword.isEmpty()) return null;
+        List<UserModel> matches = Lists.newArrayList();
+        for (UserModel userModel : Main.getUserRegistry(keyword).getRegisteredData().values()) {
+            if (userModel.getUsername().startsWith(keyword))
+                matches.add(userModel);
         }
+
+        List<UserSanitizer> users = Lists.newArrayList();
+        matches.forEach(userModel -> users.add(new UserSanitizer(userModel)));
+
+        users.sort(Comparator.comparing(UserSanitizer::getUsername));
         return null;
     }
 }
