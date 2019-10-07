@@ -15,7 +15,7 @@ import java.util.List;
 public class PostController {
 
     @RequestMapping("posts/{id}")
-    public static List<PostSanitizer> getPostsForUser(@PathVariable String id) {
+    public List<PostSanitizer> getPostsForUser(@PathVariable String id) {
         List<PostSanitizer> posts = Lists.newArrayList();
 
         UserModel userModel = Main.getUserById(id);
@@ -25,7 +25,21 @@ public class PostController {
             Main.getPostRegistry(userModel.getKey()).getRegisteredData().values().forEach(post -> posts.add(new PostSanitizer(post)));
         }
 
-        posts.sort(Comparator.comparing(PostSanitizer::getPostTime).reversed());
+        posts.sort(Comparator.comparing(PostSanitizer::getMillisSince));
+        return posts;
+    }
+
+    @RequestMapping("userposts/{id}")
+    public List<PostSanitizer> getUserPosts(@PathVariable String id) {
+        List<PostSanitizer> posts = Lists.newArrayList();
+
+        UserModel userModel = Main.getUserById(id);
+
+        if (userModel != null) {
+            Main.getPostRegistry(userModel.getKey()).getRegisteredData().values().forEach(post -> posts.add(new PostSanitizer(post)));
+        }
+
+        posts.sort(Comparator.comparing(PostSanitizer::getMillisSince));
         return posts;
     }
 

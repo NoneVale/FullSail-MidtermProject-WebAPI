@@ -11,6 +11,7 @@ public class UserSanitizer {
     private String email;
     private String birthday;
     private String profilePictureUrl;
+    private String name;
 
     private boolean verified;
 
@@ -24,6 +25,7 @@ public class UserSanitizer {
         this.email = userModel.getEmail();
         this.birthday = userModel.getBirthMonth() + "/" + userModel.getBirthDay() + "/" + userModel.getBirthYear();
         this.profilePictureUrl = userModel.getProfilePictureUrl();
+        this.name = userModel.getFirstName() + " " + userModel.getLastName();
 
         this.verified = userModel.isVerified();
 
@@ -53,6 +55,10 @@ public class UserSanitizer {
 
     public String getProfilePictureUrl() {
         return profilePictureUrl;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public boolean isVerified() {

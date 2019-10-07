@@ -43,7 +43,7 @@ public class PostSanitizer {
         return likes;
     }
 
-    public long getPostTime() {
-        return postTime;
+    public long getMillisSince() {
+        return System.currentTimeMillis() - postTime;
     }
 }
