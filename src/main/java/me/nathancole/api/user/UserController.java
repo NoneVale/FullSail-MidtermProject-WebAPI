@@ -12,7 +12,7 @@ import java.util.UUID;
 @RestController
 public class UserController {
 
-    @RequestMapping("users")
+    @RequestMapping("api/users")
     public List<UserSanitizer> getModels() {
         List<UserSanitizer> sanitizers = Lists.newArrayList();
         for (UserRegistry registry : Main.getUserRegistryMap().values()) {
@@ -24,7 +24,8 @@ public class UserController {
     }
 
     // REGISTRATION METHODS
-    @RequestMapping(method = RequestMethod.POST, value ="registrations")
+
+    @RequestMapping(method = RequestMethod.POST, value ="api/users/register")
     public void registerUser(UserRegistrationModel registrationModel) {
         if (!usernameExists(registrationModel.getUsername()) && !emailExists(registrationModel.getEmail()))
             UserFactory.createUser(registrationModel);
@@ -32,7 +33,7 @@ public class UserController {
 
     // LOOKUP METHODS
 
-    @RequestMapping("username-lookup/{username}")
+    @RequestMapping("api/users/username-lookup/{username}")
     public boolean usernameExists(@PathVariable String username) {
         for (UserRegistry registry : Main.getUserRegistryMap().values()) {
             if (registry.usernameExists(username))
@@ -41,7 +42,7 @@ public class UserController {
         return false;
     }
 
-    @RequestMapping("email-lookup/{email}")
+    @RequestMapping("api/users/email-lookup/{email}")
     public boolean emailExists(@PathVariable String email) {
         for (UserRegistry registry : Main.getUserRegistryMap().values()) {
             if (registry.emailExists(email))
@@ -51,7 +52,7 @@ public class UserController {
     }
 
 
-    @RequestMapping("users/byid/{id}")
+    @RequestMapping("api/users/byid/{id}")
     public UserSanitizer fromId(@PathVariable String id) {
         for (UserRegistry registry : Main.getUserRegistryMap().values()) {
             if (registry.userExists(UUID.fromString(id)))
@@ -60,7 +61,7 @@ public class UserController {
         return null;
     }
 
-    @RequestMapping("users/{section}")
+    @RequestMapping("api/users/{section}")
     public List<UserSanitizer> getModels(@PathVariable String section) {
         List<UserSanitizer> sanitizers = Lists.newArrayList();
         for (UserModel model : Main.getUserRegistry(section).getRegisteredData().values()) {
@@ -69,13 +70,13 @@ public class UserController {
         return sanitizers;
     }
 
-    @RequestMapping("users/{section}/{key}")
+    @RequestMapping("api/users/{section}/{key}")
     public UserSanitizer getSanitizer(@PathVariable String section, @PathVariable String key) {
         UserModel model = Main.getUserRegistry(section).getUser(key);
         return new UserSanitizer(model);
     }
 
-    @RequestMapping("users/fromid/{id}")
+    @RequestMapping("api/users/fromid/{id}")
     public UserSanitizer getFromId(@PathVariable String id) {
         for (UserRegistry registry : Main.getUserRegistryMap().values()) {
             if (registry.getUser(UUID.fromString(id)) != null)
@@ -86,7 +87,7 @@ public class UserController {
 
     // EMAIL VERIFICATION METHOD
 
-    @RequestMapping("verify/{id}")
+    @RequestMapping("api/users/verify/{id}")
     public String verify(@PathVariable String id) {
         if (UserVerifyEmail.getUser(id) != null) {
             UserVerifyEmail.getUser(id).setVerified(true);
@@ -99,23 +100,22 @@ public class UserController {
 
     // FOLLOW METHODS
 
-    @RequestMapping (method = RequestMethod.POST, value = "follow/{following}")
-    public void follow(@PathVariable String following, @RequestBody String follower) {
-        UserModel followingModel = Main.getUserById(following), followerModel = Main.getUserById(follower);
-        followingModel.addFollower(followerModel);
+    @RequestMapping (method = RequestMethod.POST, value = "api/users/follow/{following}")
+    public void follow(@PathVariable String following, UserIdForm userIdForm) {
+        UserModel followingModel = Main.getUserById(following), followerModel = Main.getUserById(userIdForm.getUserId());
         followerModel.follow(followingModel);
+
     }
 
-    @RequestMapping (method = RequestMethod.POST, value = "unfollow/{following}")
-    public void unfollow(@PathVariable String following, @RequestBody String follower) {
-        UserModel followingModel = Main.getUserById(following), followerModel = Main.getUserById(follower);
-        followingModel.removeFollower(followerModel);
+    @RequestMapping (method = RequestMethod.POST, value = "api/users/unfollow/{following}")
+    public void unfollow(@PathVariable String following, UserIdForm userIdForm) {
+        UserModel followingModel = Main.getUserById(following), followerModel = Main.getUserById(userIdForm.getUserId());
         followerModel.unfollow(followingModel);
     }
 
     // SEARCH METHODS
 
-    @RequestMapping("search/{keyword}")
+    @RequestMapping("api/users/search/{keyword}")
     public List<UserSanitizer> getResults(@PathVariable String keyword) {
         if (keyword == null || keyword.isEmpty()) return null;
         List<UserModel> matches = Lists.newArrayList();
@@ -128,6 +128,14 @@ public class UserController {
         matches.forEach(userModel -> users.add(new UserSanitizer(userModel)));
 
         users.sort(Comparator.comparing(UserSanitizer::getUsername));
-        return null;
+        return users;
+    }
+
+    // UPDATE PROFILE PICTURE
+
+    @RequestMapping(method = RequestMethod.POST, value = "api/users/profilePicture")
+    public void updateProfilePicture(UserUrlForm urlForm) {
+        UserModel userModel = Main.getUserById(urlForm.getUserId());
+        userModel.setProfilePictureUrl(urlForm.getUrl());
     }
 }

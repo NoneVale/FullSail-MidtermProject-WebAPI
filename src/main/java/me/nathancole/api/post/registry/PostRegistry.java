@@ -14,10 +14,20 @@ public interface PostRegistry extends Registry<PostModel> {
         return new PostModel(key, section);
     }
 
+    default PostModel getPost(UUID uuid) {
+        if (uuid == null)
+            return null;
+        return fromKey(uuid.toString()).orElseGet(null);
+    }
+
     default PostModel getPost(UUID uuid, UserModel userModel) {
         if (uuid == null)
             return null;
         return fromKey(uuid.toString()).orElseGet(() -> register(new PostModel(uuid, userModel)));
+    }
+
+    default boolean postExists(UUID uuid) {
+        return fromKey(uuid.toString()).isPresent();
     }
 
     @Deprecated

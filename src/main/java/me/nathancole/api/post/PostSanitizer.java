@@ -6,6 +6,7 @@ import java.util.List;
 
 public class PostSanitizer {
 
+    private String postId;
     private String author;
     private String body;
 
@@ -15,6 +16,7 @@ public class PostSanitizer {
     private long postTime;
 
     public PostSanitizer(PostModel postModel) {
+        this.postId = postModel.getKey();
         this.author = postModel.getAuthor().getKey();
         this.body = postModel.getBody();
 
@@ -25,6 +27,10 @@ public class PostSanitizer {
         postModel.getLikes().forEach(user -> likes.add(user.getKey()));
 
         this.postTime = postModel.getPostTime();
+    }
+
+    public String getPostId() {
+        return postId;
     }
 
     public String getAuthor() {

@@ -197,6 +197,7 @@ public class UserModel implements Model {
 
     public void unfollow(UserModel userModel) {
         m_Following.remove(userModel);
+        userModel.removeFollower(this);
         Main.getUserRegistry(getUsername()).register(this);
     }
 

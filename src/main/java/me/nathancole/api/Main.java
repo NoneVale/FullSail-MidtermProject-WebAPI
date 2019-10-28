@@ -3,9 +3,15 @@ package me.nathancole.api;
 import com.google.common.collect.Maps;
 import com.mongodb.*;
 import com.mongodb.client.MongoDatabase;
+import me.nathancole.api.command.Command;
+import me.nathancole.api.command.CommandManager;
+import me.nathancole.api.command.CommandSender;
+import me.nathancole.api.command.ConsoleCommandSender;
+import me.nathancole.api.commands.StopCommand;
 import me.nathancole.api.post.PostController;
 import me.nathancole.api.post.PostModel;
 import me.nathancole.api.post.PostSanitizer;
+import me.nathancole.api.post.comment.CommentModel;
 import me.nathancole.api.post.comment.registry.CommentRegistry;
 import me.nathancole.api.post.registry.MPostRegistry;
 import me.nathancole.api.post.registry.PostRegistry;
@@ -16,9 +22,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
-import java.util.HashMap;
-import java.util.Timer;
-import java.util.UUID;
+import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.Instant;
+import java.util.*;
 
 @SpringBootApplication
 public class Main {
@@ -34,7 +42,10 @@ public class Main {
 
     private static SCryptPasswordEncoder m_PasswordEncoder;
 
+    private static CommandManager commandManager;
+
     private static Timer timer;
+
 
     public static void main(String[] args) throws Exception {
         String hostname = "167.114.114.217";
@@ -82,7 +93,41 @@ public class Main {
 
         SpringApplication.run(Main.class, args);
 
+        commandManager = new CommandManager();
+        getCommandManager().getCommand("stop").setExecutor(new StopCommand());
+
         timer = new Timer();
+
+        ConsoleCommandSender sender = new ConsoleCommandSender();
+        boolean online = true;
+        Scanner scanner = new Scanner(System.in);
+
+        while (online) {
+            String nextLine = scanner.nextLine();
+            if (nextLine != null && !nextLine.isEmpty()) {
+                String[] split = nextLine.split(" ");
+                String cmdLabel = split[0];
+                StringBuilder builder = new StringBuilder();
+
+                String[] cmdArgs = new String[]{};
+                String argString = "";
+                if (split.length > 1) {
+                    for (int i = 1; i < split.length; i++) {
+                        builder.append(split[i]).append(" ");
+                    }
+                    argString = builder.toString().substring(0, builder.toString().length() - 1);
+                    cmdArgs = argString.split(" ");
+                }
+                Command command;
+                if (getCommandManager().isAlias(cmdLabel)) {
+                    command = getCommandManager().getCommandFromAlias(cmdLabel);
+                } else {
+                    command = getCommandManager().getCommand(cmdLabel);
+                }
+
+                getCommandManager().callCommand(sender, command, cmdArgs);
+            }
+        }
     }
 
     public static SCryptPasswordEncoder getPasswordEncoder() {
@@ -142,5 +187,27 @@ public class Main {
             }
         }
         return null;
+    }
+
+    public static PostModel getPostById(String postId) {
+        for (PostRegistry registry : getPostRegistryMap().values()) {
+            if (registry.postExists(UUID.fromString(postId))) {
+                return registry.getPost(UUID.fromString(postId));
+            }
+        }
+        return null;
+    }
+
+    public static CommentModel getCommentById(String commentId) {
+        for (CommentRegistry registry : getCommentRegistryMap().values()) {
+            if (registry.commentExists(UUID.fromString(commentId))) {
+                return registry.getComment(UUID.fromString(commentId));
+            }
+        }
+        return null;
+    }
+
+    public static CommandManager getCommandManager() {
+        return commandManager;
     }
 }
