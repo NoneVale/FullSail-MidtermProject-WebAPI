@@ -19,6 +19,7 @@ public class PostModel implements Model {
 
     private String m_Body;
     private String m_Key;
+    private String m_PhotoUrl;
 
     private List<CommentModel> m_Comments;
     private List<UserModel> m_Likes;
@@ -30,6 +31,7 @@ public class PostModel implements Model {
     public PostModel(UUID p_Uuid, UserModel p_Author) {
         this.m_Body = "";
         this.m_Key = p_Uuid.toString();
+        this.m_PhotoUrl = "";
 
         this.m_Comments = Lists.newArrayList();
         this.m_Likes = Lists.newArrayList();
@@ -44,6 +46,10 @@ public class PostModel implements Model {
 
         this.m_Body = p_Data.getString("body");
         this.m_Key = p_Key;
+        if (p_Data.isSet("photo-url"))
+            this.m_PhotoUrl = p_Data.getString("photo-url");
+        else 
+            this.m_PhotoUrl = "";
 
         // Load the Comment Registry Database for this post.  A comment database name is the id of the post it is under.
         CommentRegistry commentRegistry = new MCommentRegistry(this.m_Key, Main.getCommentDatabase());
@@ -65,6 +71,15 @@ public class PostModel implements Model {
 
     public void setBody(String p_Body) {
         this.m_Body = p_Body;
+        Main.getPostRegistry(getAuthor().getKey()).register(this);
+    }
+
+    public String getPhotoUrl() {
+        return m_PhotoUrl;
+    }
+
+    public void setPhotoUrl(String p_PhotoUrl) {
+        this.m_PhotoUrl = p_PhotoUrl;
         Main.getPostRegistry(getAuthor().getKey()).register(this);
     }
 
@@ -124,6 +139,7 @@ public class PostModel implements Model {
     public Map<String, Object> serialize() {
         Map<String, Object> map = Maps.newHashMap();
         map.put("body", m_Body);
+        map.put("photo-url", m_PhotoUrl);
 
         List<String> commentIds = Lists.newArrayList();
         m_Comments.forEach(comment -> commentIds.add(comment.getKey()));

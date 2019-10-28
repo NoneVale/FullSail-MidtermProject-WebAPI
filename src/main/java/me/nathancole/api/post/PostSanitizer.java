@@ -9,6 +9,7 @@ public class PostSanitizer {
     private String postId;
     private String author;
     private String body;
+    private String photoUrl;
 
     private List<String> comments;
     private List<String> likes;
@@ -19,37 +20,42 @@ public class PostSanitizer {
         this.postId = postModel.getKey();
         this.author = postModel.getAuthor().getKey();
         this.body = postModel.getBody();
+        this.photoUrl = postModel.getPhotoUrl();
 
-        comments = Lists.newArrayList();
-        postModel.getComments().forEach(comment -> comments.add(comment.getKey()));
+        this.comments = Lists.newArrayList();
+        postModel.getComments().forEach(comment -> this.comments.add(comment.getKey()));
 
-        likes = Lists.newArrayList();
-        postModel.getLikes().forEach(user -> likes.add(user.getKey()));
+        this.likes = Lists.newArrayList();
+        postModel.getLikes().forEach(user -> this.likes.add(user.getKey()));
 
         this.postTime = postModel.getPostTime();
     }
 
     public String getPostId() {
-        return postId;
+        return this.postId;
     }
 
     public String getAuthor() {
-        return author;
+        return this.author;
     }
 
     public String getBody() {
-        return body;
+        return this.body;
+    }
+
+    public String getPhotoUrl() {
+        return this.photoUrl;
     }
 
     public List<String> getComments() {
-        return comments;
+        return this.comments;
     }
 
     public List<String> getLikes() {
-        return likes;
+        return this.likes;
     }
 
     public long getMillisSince() {
-        return System.currentTimeMillis() - postTime;
+        return System.currentTimeMillis() - this.postTime;
     }
 }
