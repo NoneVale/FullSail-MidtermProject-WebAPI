@@ -1,7 +1,6 @@
 package me.nathancole.api.file;
 
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;

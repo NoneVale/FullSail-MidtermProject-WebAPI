@@ -33,6 +33,10 @@ public class PostModel implements Model {
         this.m_Key = p_Uuid.toString();
         this.m_PhotoUrl = "";
 
+        // NEVER CREATED THIS THING HERE SMH
+        CommentRegistry commentRegistry = new MCommentRegistry(this.m_Key, Main.getCommentDatabase());
+        commentRegistry.loadAllFromDb();
+        Main.getCommentRegistryMap().put(this.m_Key, commentRegistry);
         this.m_Comments = Lists.newArrayList();
         this.m_Likes = Lists.newArrayList();
 
